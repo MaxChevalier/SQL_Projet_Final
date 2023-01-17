@@ -1,6 +1,3 @@
-<?php
-    
-?>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -41,5 +38,6 @@
         </select>
         <button type="submit">Ajouter</button>
     </form>
+    <?php include 'show employes.php'; ?>
 </body>
 </html>
