@@ -20,35 +20,57 @@ $pdo = new PDO(Config::$url, Config::$user, Config::$password);
 
     </div>
     <div class="contant">
-        <?php
-        // recuperer et afficher les employes
-        // try {
+
+        <!-- <div class="mid">
+            <?php
+            //recuperer et afficher les employes
+            // try {
             $sql = "SELECT * FROM `employes`";
             $result = $pdo->query($sql);
             $result = $result->fetchAll(PDO::FETCH_ASSOC);
             if (count($result) > 0) {
-                echo "<table>";
+                // echo "<table>";
                 foreach ($result as $row) {
-                    echo "hey";
-                    $departement = $pdo->query("SELECT NomDepartement FROM `Departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
-                    echo "hey";
-                    $poste = $pdo->query("SELECT NomPoste FROM `Poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
-                    echo "hey";
-                    $PrintList = [$row["Nom"],$row["Prenom"],$row["DateArrive"],$row["Email"],$row["Telephone"],$row["Civilite"],$row["AdressePostale"],$poste,$departement];
-                    echo "<tr>";
+                    // echo "<tr>";
+                    $departement = $pdo->query("SELECT NomDepartement FROM `departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
+                    $poste = $pdo->query("SELECT NomPoste FROM `poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
+                    $PrintList = [$row["Nom"],  $row["Prenom"],  $row["DateArrive"],  $row["Email"],  $row["Telephone"],  $row["Civilite"], $row["AdressePostale"],  $poste, $departement];
                     foreach ($PrintList as $value) {
-                        echo "<td>$value</td>";
+                        // echo "<td>{$value}</td>";
                     }
-                    echo "</tr>";
                 }
-                echo "</table>";
             } else {
                 echo "0 results";
             }
-        // } catch (PDOException $e) {
-        //     echo "Error: " . $e->getMessage();
-        // }
-        ?>
+            // } catch (PDOException $e) {
+            //     echo "Error: " . $e->getMessage();
+            // }*/
+            ?>
+        </div> -->
+        <div class="left" id="1">
+            <?php
+            if (count($result) > 0) {
+                foreach ($result as $row) {
+            ?>
+                    <div class="profile" id="2">
+                        <div class="photo" id="3">
+                            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/764024/profile/profile-512.jpg">
+                        </div>
+                        <div class="content" id="4">
+                            <div class="text" id="5">
+                                <p><?php
+                                    echo $row["Nom"], $row["Prenom"];
+                                    echo "<h6>{$poste}, {$departement}</h6>";
+                                    ?></p>
+                            </div>
+                        </div>
+                    </div>
+            <?php
+                }
+            } ?>
+        </div>
+    </div>
+    <div class="right">
     </div>
 </body>
 
