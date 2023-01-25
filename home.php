@@ -36,7 +36,7 @@ $pdo = new PDO(Config::$url, Config::$user, Config::$password);
                     $poste = $pdo->query("SELECT NomPoste FROM `poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
                     $PrintList = [$row["Nom"],  $row["Prenom"],  $row["DateArrive"],  $row["Email"],  $row["Telephone"],  $row["Civilite"], $row["AdressePostale"],  $poste, $departement];
                     foreach ($PrintList as $value) {
-                        // echo "<td>{$value}</td>";
+                         echo "<td>{$value}</td>";
                     }
                 }
             } else {
@@ -48,30 +48,47 @@ $pdo = new PDO(Config::$url, Config::$user, Config::$password);
             ?>
         </div> -->
         <div class="left" id="1">
-            <?php
-            if (count($result) > 0) {
-                foreach ($result as $row) {
-            ?>
-                    <div class="profile" id="2">
-                        <div class="photo" id="3">
-                            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/764024/profile/profile-512.jpg">
-                        </div>
-                        <div class="content" id="4">
-                            <div class="text" id="5">
-                                <p><?php
-                                    echo $row["Nom"], $row["Prenom"];
-                                    echo "<h6>{$poste}, {$departement}</h6>";
-                                    ?></p>
+            <div id="hover-element">
+                <?php
+                if (count($result) > 0) {
+                    foreach ($result as $row) {
+                ?>
+                        <div class="profile" id="2">
+                            <div class="photo" id="3">
+                                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/764024/profile/profile-512.jpg">
+                            </div>
+                            <div class="content" id="4">
+                                <div class="text" id="5">
+                                    <p><?php
+                                        echo $row["Nom"], $row["Prenom"];
+                                        echo "<h6>{$poste}, {$departement}</h6>";
+                                        ?></p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-            <?php
-                }
-            } ?>
+                <?php
+                    }
+                } ?>
+            </div>
         </div>
     </div>
-    <div class="right">
-    </div>
+    <div class="right"></div>
+    <div id="hover-element"></div>
+    <div id="hidden-div" style="display:none;"><?php foreach ($PrintList as $value) {
+                         echo "<td>{$value}</td>";
+            }?></div>
+    <script>
+        let hoverElement = document.getElementById("hover-element");
+        let hiddenDiv = document.getElementById("hidden-div");
+
+        hoverElement.onmouseover = function() {
+            hiddenDiv.style.display = "block";
+        }
+
+        hoverElement.onmouseout = function() {
+            hiddenDiv.style.display = "none";
+        }
+    </script>
 </body>
 
 </html>

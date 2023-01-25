@@ -177,3 +177,8 @@ body {
     transition-duration: .3s;
     animation: pop-btn .3s both ease-in-out .5s;
 }
+#hidden-div{
+    background-color:blue;
+    color:white;
+    padding:20px;
+}
