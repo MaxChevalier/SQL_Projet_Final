@@ -120,6 +120,26 @@ if (count($result) > 0) {
             </table>
         </div>
         <div class="right">
+        <?php
+            if (count($result) > 0) {
+                foreach ($result as $row) {
+            ?>
+                    <div class="profile" id="2">
+                        <div class="photo" id="3">
+                            <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/764024/profile/profile-512.jpg">
+                        </div>
+                        <div class="content" id="4">
+                            <div class="text" id="5">
+                                <p><?php
+                                    echo $row["Nom"], $row["Prenom"];
+                                    echo "<h6>{$poste}, {$departement}</h6>";
+                                    ?></p>
+                            </div>
+                        </div>
+                    </div>
+            <?php
+                }
+            } ?>
         </div>
     </div>
 </body>
