@@ -309,3 +309,8 @@ select{
     background-color: #dfdfdf;
     color: #000000;
 }
+#hidden-div{
+    background-color:blue;
+    color:white;
+    padding:20px;
+}
