@@ -69,7 +69,7 @@ if (count($result) > 0) {
                     </div>
                 </div>
                 <hr>
-                <h3>date d'arrivée : </h3>
+                <h3>Date d'arrivée : </h3>
                 <div>
                     <input type="date" name="date_min" value="0001-01-01" class="input">
                     <label for="0001-01-01">min</label>
@@ -81,7 +81,7 @@ if (count($result) > 0) {
                     ?>
                 </div>
                 <hr>
-                <h3>poste : </h3>
+                <h3>Poste : </h3>
                 <select name="poste" id="poste">
                     <option value="0">Tous</option>
                     <?php
@@ -94,7 +94,7 @@ if (count($result) > 0) {
                     ?>
                 </select>
                 <hr>
-                <h3>département : </h3>
+                <h3>Département : </h3>
                 <select name="departement" id="departement">
                     <option value="0">Tous</option>
                     <?php
