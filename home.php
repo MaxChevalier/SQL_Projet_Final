@@ -37,6 +37,9 @@ if (count($result) > 0) {
 
 <body>
     <div class="header">
+        <div class="headerName">
+            <h1>Employes Manager</h1>
+        </div>
         <div class="addUser">
             <button>Ajouter un employer</button>
         </div>
