@@ -16,7 +16,7 @@ if (count($result) > 0) {
     foreach ($result as $row) {
         $departement = $pdo->query("SELECT NomDepartement FROM `Departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
         $poste = $pdo->query("SELECT NomPoste FROM `Poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
-        $PrintList = [$row["Nom"], $row["Prenom"], $row["DateArrive"], $row["Email"], $row["Telephone"], $row["Civilite"], $row["AdressePostale"], $poste, $departement];
+        $PrintList = [$row["Nom"], $row["Prenom"], $row["DateArrive"], $row["Email"], $row["Telephone"], $row["Civilite"], $row["AdressePostale"], $poste, $departement, $row["ID_Employes"], $row["ID_Departement"], $row["ID_Poste"]];
         array_push($info, $PrintList);
     }
 }
@@ -30,13 +30,16 @@ if (count($result) > 0) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css">
+    <script src="https://kit.fontawesome.com/c85e43ba57.js" crossorigin="anonymous"></script>
     <script src="home.js"></script>
     <title>Document</title>
 </head>
 
 <body>
     <div class="header">
-
+        <div class="addUser">
+            <button>Ajouter un employer</button>
+        </div>
     </div>
     <div class="content_">
         <div class="left">
@@ -144,8 +147,28 @@ if (count($result) > 0) {
                     <p id="adresse">Adresse</p>
                 </div>
             </div>
+            <input type="hidden" id="id_poste" value="">
+            <input type="hidden" id="id_dep" value="">
+            <div class="funcButton">
+                <button id="modif">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
+                <form action="deleteUser.php" method="post">
+                    <button id="suppr" type="submit" name="id" value="">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+                <script>
+                    // #suppr event before submit
+                    document.getElementById("suppr").addEventListener("click", function(e) {
+                        if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+                            e.preventDefault();
+                        }
+                    });
+                </script>
+            </div>
         </div>
-        <div class="right"> <!-- le trucvert -->
+        <div class="right">
             <?php
             if (count($info) > 0) {
                 for ($j = 0; $j < count($info); $j++) {
@@ -176,6 +199,133 @@ if (count($result) > 0) {
                 }
             } ?>
         </div>
+    </div>
+    <div class="popUpAddEmployer">
+        <form method="post" action="addEmployer.php">
+            <table>
+                <tr>
+                    <td>
+                        <label for="popCivilite">civilité : </label>
+                    </td>
+                    <td>
+                        <select name="popCivilite" id="popCivilite">
+                            <option value="M">M</option>
+                            <option value="Mme">Mme</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popName">Nom : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="popName" id="popName" placeholder="Nom" maxlength="50">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popFirstName">Prénom : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="popFirstName" id="popFirstName" placeholder="Prénom">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popEmail">Email : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="popEmail" id="popEmail" placeholder="Email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popPhone">Téléphone : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="popPhone" id="popPhone" placeholder="Phone">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popAddress">Adresse : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="popAddress" id="popAddress" placeholder="Address">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popArrivalDate">Date d'arrivé : </label>
+                    </td>
+                    <td>
+                        <input type="date" name="popArrivalDate" id="popArrivalDate" placeholder="Date d'arrivé">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popIdPost">Post : </label>
+                    </td>
+                    <td>
+                        <select name="popIdPost" id="popIdPost">
+                            <?php
+                            $result = $pdo->query("SELECT * FROM `Poste`")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($result as $row) {
+                                echo "<option value='{$row["ID_Poste"]}'";
+                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["poste"] == $row["ID_Poste"]) echo "selected";
+                                echo ">{$row["NomPoste"]}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="popIdDepartment">Département : </label>
+                    </td>
+                    <td>
+                        <select name="popIdDepartment" id="popIdDepartment">
+                            <?php
+                            $result = $pdo->query("SELECT * FROM `Departement`")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($result as $row) {
+                                echo "<option value='{$row["ID_Departement"]}'";
+                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["departement"] == $row["ID_Departement"]) echo "selected";
+                                echo ">{$row["NomDepartement"]}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <input type="hidden" name="popIdEmployer" value="Null" id="popIdEmployer">
+                <button type="submit" id="sumbmitEmployer">Ajouter</button>
+        </form>
+        <button class="closePopUpAddEmployer">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <script>
+            document.querySelector(".closePopUpAddEmployer").addEventListener("click", function() {
+                document.querySelector(".popUpAddEmployer").style.display = "none";
+            });
+            document.querySelector(".addUser button").addEventListener("click", function() {
+                document.querySelector(".popUpAddEmployer").style.display = "block";
+                document.getElementById("popIdEmployer").value = "Null";
+                resetPopUp();
+            });
+            // #show popup to update user
+            document.getElementById("modif").addEventListener("click", function() {
+                document.querySelector(".popUpAddEmployer").style.display = "block";
+                document.getElementById("popIdEmployer").value = document.getElementById("suppr").value;
+                setPopUp();
+            });
+            document.getElementById("sumbmitEmployer").addEventListener("click", function(e) {
+                if (!(document.getElementById("popName").value && document.getElementById("popFirstName").value && document.getElementById("popEmail").value && document.getElementById("popPhone").value && document.getElementById("popAddress").value && document.getElementById("popArrivalDate").value)) {
+                    e.preventDefault();
+                    alert("Veuillez remplir tout les champs");
+                }
+            });
+        </script>
     </div>
 </body>
 

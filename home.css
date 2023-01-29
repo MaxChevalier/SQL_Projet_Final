@@ -14,6 +14,7 @@
     padding: 1rem;
     -webkit-box-shadow: 1px 1px 10px 3px #000000;
     box-shadow: 1px 1px 10px 3px #000000;
+    display: none;
 }
 
 .popUpAddEmployer form {
@@ -95,12 +96,18 @@
     height: calc(100% - 1vw);
     margin: 0.5vw;
     border-radius: 1rem;
+    padding: 5px;
 }
 
 .left {
     background : linear-gradient(0.3turn,#e4e4e4,#c0c0c0);
     border-radius: 10px;
+    width: 26vw;
+    margin-left: -1vw;
+}
 
+.right {
+    width: 25vw;
 }
 
 p{
@@ -109,7 +116,6 @@ p{
 
 .left,
 .right {
-    width: 25vw;
     overflow-y : auto;
     height: 100%;
 }
@@ -254,13 +260,22 @@ body {
 
 }
 
+.center .bas{
+    width: 100%;
+    height: calc(100% - 5vh);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1vh;
+}
+
 .center .bas div{
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     width: 100%;
-    height: 5rem;
 }
 
 button{
@@ -309,8 +324,41 @@ select{
     background-color: #dfdfdf;
     color: #000000;
 }
-#hidden-div{
-    background-color:blue;
-    color:white;
-    padding:20px;
+
+.funcButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+}
+
+
+.funcButton button{
+    width: 5rem;
+}
+
+.addUser{
+    position: fixed;
+    right: 0;
+    width: 25vw;
+    height: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.addUser button{
+    width: 90%;
+}
+
+.closePopUpAddEmployer{
+    background: transparent;
+    border: none;
+}
+
+.closePopUpAddEmployer:hover{
+    background: transparent;
+    border: none;
 }
