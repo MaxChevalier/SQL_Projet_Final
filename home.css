@@ -99,14 +99,13 @@
 }
 
 .left {
-    background-color:#AAAAAA; 
+    background-color:#F3F2EF; 
 }
 
 p{
     margin-left: 10px;
 }
 
-.left,
 .right {
     width: 25vw;
     overflow-y : auto;
@@ -144,7 +143,7 @@ p{
 body, html {
     margin: 0;
     background: rgb(white);
-    color: #7a7b7c;
+    color: #4a4a4a;
 }
 
 body {
@@ -265,11 +264,11 @@ button{
     width: 100%;
     height: 2rem;
     border: block;
-    border-radius: 1rem;
-    font-size: 1.2rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
     padding-left: 0.5rem;
-    background-color: #dfdfdf;
-    color: #000000;
+    background-color: #fdf2f2;
+    color: #4e4c4c;
     transition: 0.5s;
 }
 
@@ -281,13 +280,13 @@ button:hover{
 
 .input{
     width: calc(100% - 3rem);
-    height: 2rem;
+    height: 1.5rem;
     border: block;
-    border-radius: 1rem;
+    border-radius: 0.5rem;
     font-size: 1.2rem;
     padding-left: 0.5rem;
-    background-color: #dfdfdf;
-    color: #000000;
+    background-color: #fefefe;
+    color: #454544;
     transition: 0.5s;
 }
 
@@ -303,7 +302,6 @@ select{
     border: block;
     border-radius: 1rem;
     font-size: 1.2rem;
-    padding-left: 0.5rem;
-    background-color: #dfdfdf;
-    color: #000000;
+    padding-left: 1rem;
+    background-color: #fafafa;
 }
