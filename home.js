@@ -8,4 +8,9 @@ function showinfo(id){
     document.getElementById("adresse").innerHTML = document.getElementById(id+"/6").value;
     document.getElementById("nom").innerHTML = document.getElementById(id+"/0").value;
     document.getElementById("prenom").innerHTML = document.getElementById(id+"/1").value;
+    document.getElementById("suppr").value = document.getElementById(id+"/9").value;
+}
+
+function closePopUp(){
+    document.querySelector(".popUpAddEmployer").style.display = "none";
 }

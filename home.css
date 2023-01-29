@@ -14,6 +14,7 @@
     padding: 1rem;
     -webkit-box-shadow: 1px 1px 10px 3px #000000;
     box-shadow: 1px 1px 10px 3px #000000;
+    display: none;
 }
 
 .popUpAddEmployer form {
@@ -100,7 +101,12 @@
 .left {
     background : linear-gradient(0.3turn,#e4e4e4,#c0c0c0);
     border-radius: 10px;
+    width: 26vw;
+    margin-left: -1vw;
+}
 
+.right {
+    width: 25vw;
 }
 
 p{
@@ -109,7 +115,6 @@ p{
 
 .left,
 .right {
-    width: 25vw;
     overflow-y : auto;
     height: 100%;
 }
@@ -226,6 +231,7 @@ body {
     justify-content: center;
     width: 100%;
     height: calc(20vw + 5rem);
+    height: 20vw;
 }
 
 .center .haut .info{
@@ -308,4 +314,42 @@ select{
     padding-left: 0.5rem;
     background-color: #dfdfdf;
     color: #000000;
+}
+
+.funcButton {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+}
+
+
+.funcButton button{
+    width: 5rem;
+}
+
+.addUser{
+    position: fixed;
+    right: 0;
+    width: 25vw;
+    height: 5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.addUser button{
+    width: 90%;
+}
+
+.closePopUpAddEmployer{
+    background: transparent;
+    border: none;
+}
+
+.closePopUpAddEmployer:hover{
+    background: transparent;
+    border: none;
 }

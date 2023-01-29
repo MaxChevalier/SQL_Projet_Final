@@ -16,7 +16,7 @@ if (count($result) > 0) {
     foreach ($result as $row) {
         $departement = $pdo->query("SELECT NomDepartement FROM `Departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
         $poste = $pdo->query("SELECT NomPoste FROM `Poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
-        $PrintList = [$row["Nom"], $row["Prenom"], $row["DateArrive"], $row["Email"], $row["Telephone"], $row["Civilite"], $row["AdressePostale"], $poste, $departement];
+        $PrintList = [$row["Nom"], $row["Prenom"], $row["DateArrive"], $row["Email"], $row["Telephone"], $row["Civilite"], $row["AdressePostale"], $poste, $departement, $row["ID_Employes"]];
         array_push($info, $PrintList);
     }
 }
@@ -30,13 +30,16 @@ if (count($result) > 0) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="home.css">
+    <script src="https://kit.fontawesome.com/c85e43ba57.js" crossorigin="anonymous"></script>
     <script src="home.js"></script>
     <title>Document</title>
 </head>
 
 <body>
     <div class="header">
-
+        <div class="addUser">
+            <button>Ajouter un employer</button>
+        </div>
     </div>
     <div class="content_">
         <div class="left">
@@ -144,6 +147,24 @@ if (count($result) > 0) {
                     <p id="adresse">Adresse</p>
                 </div>
             </div>
+            <div class="funcButton">
+                <button id="modif">
+                    <i class="fa-solid fa-pencil"></i>
+                </button>
+                <form action="deleteUser.php" method="post">
+                    <button id="suppr" type="submit" name="id" value="">
+                        <i class="fa-solid fa-trash-can"></i>
+                    </button>
+                </form>
+                <script>
+                    // #suppr event before submit
+                    document.getElementById("suppr").addEventListener("click", function(e) {
+                        if (!confirm("Voulez-vous vraiment supprimer cet utilisateur ?")) {
+                            e.preventDefault();
+                        }
+                    });
+                </script>
+            </div>
         </div>
         <div class="right"> <!-- le trucvert -->
             <?php
@@ -176,6 +197,118 @@ if (count($result) > 0) {
                 }
             } ?>
         </div>
+    </div>
+    <div class="popUpAddEmployer">
+        <form method="post">
+            <table>
+                <tr>
+                    <td>
+                        <label for="civilite">civilité : </label>
+                    </td>
+                    <td>
+                        <select name="civilite">
+                            <option value="M">M</option>
+                            <option value="Mme">Mme</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="name">Nom : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="name" placeholder="Nom" maxlength="50">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="firstname">Prénom : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="firstname" placeholder="Prénom">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="email">Email : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="email" placeholder="Email">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="phone">Téléphone : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="phone" placeholder="Phone">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="address">Adresse : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="address" placeholder="Address">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="arrivalDate">Date d'arrivé : </label>
+                    </td>
+                    <td>
+                        <input type="date" name="arrivalDate" placeholder="Date d'arrivé">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="idPost">Post : </label>
+                    </td>
+                    <td>
+                        <select name="idPost">
+                            <?php
+                            $result = $pdo->query("SELECT * FROM `Poste`")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($result as $row) {
+                                echo "<option value='{$row["ID_Poste"]}'";
+                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["poste"] == $row["ID_Poste"]) echo "selected";
+                                echo ">{$row["NomPoste"]}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="idDepartment">Département : </label>
+                    </td>
+                    <td>
+                        <select name="idDepartment">
+                            <?php
+                            $result = $pdo->query("SELECT * FROM `Departement`")->fetchAll(PDO::FETCH_ASSOC);
+                            foreach ($result as $row) {
+                                echo "<option value='{$row["ID_Departement"]}'";
+                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["departement"] == $row["ID_Departement"]) echo "selected";
+                                echo ">{$row["NomDepartement"]}</option>";
+                            }
+                            ?>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+            <button type="submit">Ajouter</button>
+        </form>
+        <button class="closePopUpAddEmployer">
+            <i class="fa-solid fa-times"></i>
+        </button>
+        <script>
+            document.querySelector(".closePopUpAddEmployer").addEventListener("click", function(
+                closePopUp();
+            ));
+            document.querySelector(".addUser button").addEventListener("click", function() {
+                document.querySelector(".popUpAddEmployer").style.display = "block";
+            });
+        </script>
     </div>
 </body>
 
