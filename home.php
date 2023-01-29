@@ -1,6 +1,25 @@
 <?php
 require_once 'Config.php';
 $pdo = new PDO(Config::$url, Config::$user, Config::$password);
+$sql = "SELECT * FROM `employes`";
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $sql .= " WHERE ";
+    $sql .= "(Civilite = '{$_POST["civiliteM"]}' OR Civilite = '{$_POST["civiliteMme"]}' OR Civilite = '{$_POST["civiliteAutre"]}') AND ";
+    $sql .= "( DateArrive BETWEEN '{$_POST["date_min"]}' AND '{$_POST["date_max"]}' )";
+    if ($_POST["poste"] != 0) $sql .= " AND ID_Poste = {$_POST["poste"]}";
+    if ($_POST["departement"] != 0) $sql .= " AND ID_Departement = {$_POST["departement"]}";
+    if ($_POST["recherche"] != "") $sql .= " AND (Nom LIKE '%{$_POST["recherche"]}%' OR Prenom LIKE '%{$_POST["recherche"]}%')";
+}
+$result = $pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+$info = [];
+if (count($result) > 0) {
+    foreach ($result as $row) {
+        $departement = $pdo->query("SELECT NomDepartement FROM `Departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
+        $poste = $pdo->query("SELECT NomPoste FROM `Poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
+        $PrintList = [$row["Nom"], $row["Prenom"], $row["DateArrive"], $row["Email"], $row["Telephone"], $row["Civilite"], $row["AdressePostale"], $poste, $departement];
+        array_push($info, $PrintList);
+    }
+}
 ?>
 
 <!DOCTYPE html>
@@ -19,76 +38,145 @@ $pdo = new PDO(Config::$url, Config::$user, Config::$password);
     <div class="header">
 
     </div>
-    <div class="contant">
-
-        <!-- <div class="mid">
-            <?php
-            //recuperer et afficher les employes
-            // try {
-            $sql = "SELECT * FROM `employes`";
-            $result = $pdo->query($sql);
-            $result = $result->fetchAll(PDO::FETCH_ASSOC);
-            if (count($result) > 0) {
-                // echo "<table>";
-                foreach ($result as $row) {
-                    // echo "<tr>";
-                    $departement = $pdo->query("SELECT NomDepartement FROM `departement` WHERE ID_Departement = {$row["ID_Departement"]}")->fetchAll()[0][0];
-                    $poste = $pdo->query("SELECT NomPoste FROM `poste` WHERE ID_Poste = {$row["ID_Poste"]}")->fetchAll()[0][0];
-                    $PrintList = [$row["Nom"],  $row["Prenom"],  $row["DateArrive"],  $row["Email"],  $row["Telephone"],  $row["Civilite"], $row["AdressePostale"],  $poste, $departement];
-                    foreach ($PrintList as $value) {
-                         echo "<td>{$value}</td>";
-                    }
-                }
-            } else {
-                echo "0 results";
-            }
-            // } catch (PDOException $e) {
-            //     echo "Error: " . $e->getMessage();
-            // }*/
-            ?>
-        </div> -->
-        <div class="left" id="1">
-            <div id="hover-element">
-                <?php
-                if (count($result) > 0) {
+    <div class="content_">
+        <div class="left">
+            <form method="post">
+                <input type="text" placeholder="Rechercher ..." name="recherche" class="input" <?php
+                                                                                                if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["recherche"] != "") echo "value='{$_POST["recherche"]}'"
+                                                                                                ?>>
+                <hr>
+                <h3>civilité : </h3>
+                <div class="civ">
+                    <div><input type="checkbox" name="civiliteM" value="M" <?php
+                                                                            if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_POST["civiliteM"]) echo "checked"
+                                                                            ?>>
+                        <label for="M">M</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="civiliteMme" value="Mme" <?php
+                                                                                if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_POST["civiliteMme"]) echo "checked"
+                                                                                ?>>
+                        <label for="Mme">Mme</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="civiliteAutre" value="Autre" <?php
+                                                                                    if ($_SERVER['REQUEST_METHOD'] === 'GET' || $_POST["civiliteAutre"]) echo "checked"
+                                                                                    ?>>
+                        <label for="Autre">Autre</label>
+                    </div>
+                </div>
+                <hr>
+                <h3>date d'arrivée : </h3>
+                <div>
+                    <input type="date" name="date_min" value="0001-01-01" class="input">
+                    <label for="0001-01-01">min</label>
+                    <br><br>
+                    <?php
+                    $date = date("Y-m-d");
+                    echo "<input type='date' name='date_max' value='$date' class=\"input\">";
+                    echo "<label for='$date'> max</label>";
+                    ?>
+                </div>
+                <hr>
+                <h3>poste : </h3>
+                <select name="poste" id="poste">
+                    <option value="0">Tous</option>
+                    <?php
+                    $result = $pdo->query("SELECT * FROM `Poste`")->fetchAll(PDO::FETCH_ASSOC);
                     foreach ($result as $row) {
-                ?>
-                        <div class="profile" id="2">
-                            <div class="photo" id="3">
-                                <img src="https://s3-us-west-2.amazonaws.com/s.cdpn.io/764024/profile/profile-512.jpg">
-                            </div>
-                            <div class="content" id="4">
-                                <div class="text" id="5">
-                                    <p><?php
-                                        echo $row["Nom"], $row["Prenom"];
-                                        echo "<h6>{$poste}, {$departement}</h6>";
-                                        ?></p>
-                                </div>
-                            </div>
-                        </div>
-                <?php
+                        echo "<option value='{$row["ID_Poste"]}'";
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["poste"] == $row["ID_Poste"]) echo "selected";
+                        echo ">{$row["NomPoste"]}</option>";
                     }
-                } ?>
+                    ?>
+                </select>
+                <hr>
+                <h3>département : </h3>
+                <select name="departement" id="departement">
+                    <option value="0">Tous</option>
+                    <?php
+                    $result = $pdo->query("SELECT * FROM `Departement`")->fetchAll(PDO::FETCH_ASSOC);
+                    foreach ($result as $row) {
+                        echo "<option value='{$row["ID_Departement"]}'";
+                        if ($_SERVER['REQUEST_METHOD'] === 'POST' && $_POST["departement"] == $row["ID_Departement"]) echo "selected";
+                        echo ">{$row["NomDepartement"]}</option>";
+                    }
+                    ?>
+                </select>
+                <hr>
+                <button type="submit">Rechercher</button>
+            </form>
+        </div>
+        <div class="center">
+            <div class="haut">
+                <div class="image">
+                    <img src="./img/chat.jpg">
+                </div>
+                <div class="info">
+                    <h1 id="civilite">Civilite</h1>
+                    <h1 id="nom">Nom</h1>
+                    <h1 id="prenom">Prenom</h1>
+                </div>
+            </div>
+            <div class="bas">
+                <div>
+                    <label for="date">Date d'arrivée : </label>
+                    <p id="date">Date d'arrivée</p>
+                </div>
+                <div>
+                    <label for="poste_">Poste : </label>
+                    <p id="poste_">Poste</p>
+                </div>
+                <div>
+                    <label for="departement_">Département : </label>
+                    <p id="departement_">Département</p>
+                </div>
+                <div>
+                    <label for="tel">Téléphone : </label>
+                    <p id="tel">Téléphone</p>
+                </div>
+                <div>
+                    <label for="mail">Mail : </label>
+                    <p id="mail">Mail</p>
+                </div>
+                <div>
+                    <label for="adresse">Adresse : </label>
+                    <p id="adresse">Adresse</p>
+                </div>
             </div>
         </div>
+        <div class="right"> <!-- le trucvert -->
+            <?php
+            if (count($info) > 0) {
+                for ($j = 0; $j < count($info); $j++) {
+                    $row = $info[$j];
+            ?>
+                    <div class="profile" id="<?php $j ?>" onmouseover="showinfo(<?php echo $j ?>)">
+                        <div class="photo">
+                            <img src="./img/chat.jpg">
+                        </div>
+                        <div class="content">
+                            <div class="text">
+                                <p><?php
+                                    echo $row[0], " ", $row[1];
+                                    echo "<h6>{$row[8]}, {$row[7]}</h6>";
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                        <div>
+                            <?php
+                            for ($i = 0; $i < count($row); $i++) {
+                                echo "<input type='hidden' value=\"{$row[$i]}\" id='{$j}/{$i}'>";
+                            }
+                            ?>
+                        </div>
+                    </div>
+            <?php
+                }
+            } ?>
+        </div>
     </div>
-    <div class="right"></div>
-    <div id="hover-element"></div>
-    <div id="hidden-div" style="display:none;"><?php foreach ($PrintList as $value) {
-                         echo "<td>{$value}</td>";
-            }?></div>
-    <script>
-        let hoverElement = document.getElementById("hover-element");
-        let hiddenDiv = document.getElementById("hidden-div");
-
-        hoverElement.onmouseover = function() {
-            hiddenDiv.style.display = "block";
-        }
-
-        hoverElement.onmouseout = function() {
-            hiddenDiv.style.display = "none";
-        }
-    </script>
 </body>
 
 </html>

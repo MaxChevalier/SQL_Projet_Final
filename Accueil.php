@@ -60,4 +60,3 @@ include_once 'Config.php';
 
 </body>
 </html>
-
