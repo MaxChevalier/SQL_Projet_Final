@@ -204,6 +204,11 @@ if (count($result) > 0) {
         </div>
     </div>
     <div class="popUpAddEmployer">
+        <div class="crossPopUp">
+            <button class="closePopUpAddEmployer">
+                <i class="fa-solid fa-times"></i>
+            </button>
+        </div>
         <form method="post" action="addEmployer.php">
             <table>
                 <tr>
@@ -299,14 +304,16 @@ if (count($result) > 0) {
                             ?>
                         </select>
                     </td>
+                    <td>
+                        <button class="plusButton">
+                            <i class="fa-solid fa-plus"></i>
+                        </button>
+                    </td>
                 </tr>
             </table>
             <input type="hidden" name="popIdEmployer" value="Null" id="popIdEmployer">
-                <button type="submit" id="sumbmitEmployer">Ajouter</button>
+            <button type="submit" id="sumbmitEmployer" class="AddButtonPopUp">Ajouter</button>
         </form>
-        <button class="closePopUpAddEmployer">
-            <i class="fa-solid fa-times"></i>
-        </button>
         <script>
             document.querySelector(".closePopUpAddEmployer").addEventListener("click", function() {
                 document.querySelector(".popUpAddEmployer").style.display = "none";
