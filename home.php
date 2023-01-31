@@ -209,7 +209,7 @@ if (count($result) > 0) {
                 <i class="fa-solid fa-times"></i>
             </button>
         </div>
-        <form method="post" action="addEmployer.php">
+        <form class="popUpAddEmployerform" method="post" action="addEmployer.php">
             <table>
                 <tr>
                     <td>
@@ -304,11 +304,6 @@ if (count($result) > 0) {
                             ?>
                         </select>
                     </td>
-                    <td>
-                        <button class="plusButton">
-                            <i class="fa-solid fa-plus"></i>
-                        </button>
-                    </td>
                 </tr>
             </table>
             <input type="hidden" name="popIdEmployer" value="Null" id="popIdEmployer">
@@ -336,6 +331,18 @@ if (count($result) > 0) {
                 }
             });
         </script>
+        <hr>
+        <div class="addDepPoste">
+        <h3>Ajouter un nouveau Departement ou poste</h3>
+            <form action="addDep.php" method="post">
+                <select name="addDep_Poste" id="addDep_Poste">
+                    <option value="Departement">Departement</option>
+                    <option value="Poste">Poste</option>
+                </select>
+                <input type="text" name="addDep_PosteName" id="addDep_PosteName" placeholder="Nom">
+                <button type="submit">Ajouter</button>
+            </form>
+        </div>
     </div>
 </body>
 
