@@ -333,15 +333,23 @@ if (count($result) > 0) {
         </script>
         <hr>
         <div class="addDepPoste">
-        <h3>Ajouter un nouveau Departement ou poste</h3>
+            <h3>Ajouter un nouveau Departement ou poste</h3>
             <form action="addDep.php" method="post">
                 <select name="addDep_Poste" id="addDep_Poste">
                     <option value="Departement">Departement</option>
                     <option value="Poste">Poste</option>
                 </select>
                 <input type="text" name="addDep_PosteName" id="addDep_PosteName" placeholder="Nom">
-                <button type="submit">Ajouter</button>
+                <button type="submit" id="buttonPostDep">Ajouter</button>
             </form>
+            <script>
+                document.getElementById("buttonPostDep").addEventListener("click", function(e) {
+                    if (!(document.getElementById("addDep_PosteName").value)) {
+                        e.preventDefault();
+                        alert("Veuillez remplir tout les champs");
+                    }
+                });
+            </script>
         </div>
     </div>
 </body>
